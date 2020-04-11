@@ -55,7 +55,10 @@ class Redirector(object):
             try:
                 data = self.serial.read(self.serial.in_waiting or 1)
                 if data:
-                    print(data, end="")
+                    try:
+                        print(data.decode('utf-8'), end="")
+                    except UnicodeDecodeError:
+                        pass
                     # escape outgoing data when needed (Telnet IAC (0xff) character)
                     self.write(b''.join(self.rfc2217.escape(data)))
             except socket.error as msg:
@@ -78,7 +81,10 @@ class Redirector(object):
                 if not data:
                     break
                 
-                print(data, end="")
+                try:
+                    print(data.decode('utf-8'), end="")
+                except UnicodeDecodeError:
+                    pass
                 self.serial.write(b''.join(self.rfc2217.filter(data)))
             except socket.error as msg:
                 self.log.error('{}'.format(msg))

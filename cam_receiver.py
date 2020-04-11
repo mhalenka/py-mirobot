@@ -18,5 +18,5 @@ while True:
     (rpiName, frame) = imageHub.recv_image()
     imageHub.send_reply(b"OK")
 
-    cv2.imshow(frame)
-    cv2.waitKey(0.01)
+    cv2.imshow("frame", frame)
+    cv2.waitKey(1)

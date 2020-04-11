@@ -5,7 +5,7 @@ from pymirobot.serial_device import SerialDevice
 
 
 class Mirobot:
-    def __init__(self, receive_callback=None, debug=False, limit_file=None):
+    def __init__(self, receive_callback=None, debug=False):
         # The component to which this extension is attached
         self.serial_device = SerialDevice()
         self.receive_callback = receive_callback

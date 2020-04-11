@@ -1,5 +1,6 @@
 from pymirobot.mirobot import Mirobot
 from pymirobot.RemoteSerial import RemoteSerial
+from time import sleep
 
 
 class MirobotClient(Mirobot):
@@ -13,3 +14,19 @@ class MirobotClient(Mirobot):
             self.receive_callback = receive_callback
 
         self.serial_device.open()
+        self.serial_device.telnet.read_until(
+            bytes("Using reset pos!", "utf-8"), timeout=3
+        )
+        # Sometimes gets sent twice?
+        self.serial_device.telnet.read_until(
+            bytes("Using reset pos!", "utf-8"), timeout=1
+        )
+        
+    def home_simultaneous(self):
+        msg = "$H"
+        self.send_msg(msg)
+        self.serial_device.telnet.read_until(
+            bytes("ok", "utf-8"), timeout=20
+        )
+        # If sending a command while returning to zero, coordinates get messed up
+        sleep(5)
